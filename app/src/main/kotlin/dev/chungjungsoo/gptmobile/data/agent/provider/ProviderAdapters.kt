@@ -231,8 +231,8 @@ class AnthropicMessagesAdapter @Inject constructor(
                     maxTokens = if (isThinkingActive) 16000 else 4096,
                     stream = platform.stream,
                     systemPrompt = platform.systemPrompt,
-                    temperature = if (isThinkingActive) null else platform.temperature,
-                    topP = if (isThinkingActive) null else platform.topP,
+                    temperature = if (isThinkingActive || !anthropicSupportsDeprecatedSamplingParams(platform.model)) null else platform.temperature,
+                    topP = if (isThinkingActive || !anthropicSupportsDeprecatedSamplingParams(platform.model)) null else platform.topP,
                     thinking = thinkingPolicy.config,
                     tools = tools.takeIf { it.isNotEmpty() }?.map { definition ->
                         AnthropicTool(definition.name, definition.description, definition.inputSchema)
@@ -306,6 +306,21 @@ internal fun anthropicThinkingPolicy(
         config = AnthropicThinkingConfig(type = "enabled", budgetTokens = 10_000, display = "summarized"),
         betaFeatures = if (supportsManualInterleaving) setOf(ANTHROPIC_INTERLEAVED_THINKING_BETA) else emptySet()
     )
+}
+
+/**
+ * Models after Opus 4.6 (adaptive-thinking generation: 4.6/4.7/4.8, Claude N-5 family,
+ * Mythos, Fable) reject `temperature`/`top_p`/`top_k` outside narrow backwards-compat
+ * values (temperature must be 1.0, top_p must be >= 0.99). Cleaner and safer to just
+ * omit these deprecated fields entirely for those models rather than rely on the API's
+ * backwards-compat coercion.
+ */
+internal fun anthropicSupportsDeprecatedSamplingParams(model: String): Boolean {
+    val normalizedModel = model.lowercase()
+    val isNewGeneration = ADAPTIVE_ANTHROPIC_MODEL_PATTERN.containsMatchIn(normalizedModel) ||
+        normalizedModel.contains("mythos") ||
+        normalizedModel.contains("fable")
+    return !isNewGeneration
 }
 
 internal const val ANTHROPIC_INTERLEAVED_THINKING_BETA = "interleaved-thinking-2025-05-14"
