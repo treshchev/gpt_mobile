@@ -52,7 +52,7 @@ data class ChatCompletionRequest(
 
     @SerialName("tools")
     @EncodeDefault(EncodeDefault.Mode.NEVER)
-    val tools: List<ChatFunctionTool>? = null
+    val tools: List<ChatFunctionTool>? = null,
 
     @SerialName("reasoning")
     @EncodeDefault(EncodeDefault.Mode.NEVER)
