@@ -83,3 +83,9 @@ data class ChatFunctionDefinition(
     @SerialName("parameters")
     val parameters: JsonObject
 )
+
+@Serializable
+data class ReasoningToggle(
+    @SerialName("enabled")
+    val enabled: Boolean
+)
