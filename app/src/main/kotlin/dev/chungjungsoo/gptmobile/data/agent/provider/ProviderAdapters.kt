@@ -183,6 +183,11 @@ class OpenAICompatibleAdapter @Inject constructor(
                     temperature = platform.temperature,
                     topP = platform.topP,
                     tools = requestTools
+                    reasoning = if (platform.model.contains("deepseek", ignoreCase = true)) {
+                        ReasoningToggle(enabled = false)
+                    } else {
+                        null
+                    }
                 )
                 val assembler = ChatCompletionsEventAssembler()
                 var failed = false
