@@ -182,7 +182,7 @@ class OpenAICompatibleAdapter @Inject constructor(
                     stream = platform.stream,
                     temperature = platform.temperature,
                     topP = platform.topP,
-                    tools = requestTools
+                    tools = requestTools,
                     reasoning = if (platform.model.contains("deepseek", ignoreCase = true)) {
                         ReasoningToggle(enabled = false)
                     } else {
