@@ -28,6 +28,7 @@ import dev.chungjungsoo.gptmobile.data.dto.google.request.GoogleTool
 import dev.chungjungsoo.gptmobile.data.dto.google.request.GoogleToolConfig
 import dev.chungjungsoo.gptmobile.data.dto.google.request.SafetySetting
 import dev.chungjungsoo.gptmobile.data.dto.google.request.ThinkingConfig as GoogleThinkingConfig
+import dev.chungjungsoo.gptmobile.data.dto.openai.request.ReasoningToggle
 import dev.chungjungsoo.gptmobile.data.dto.groq.request.GroqChatCompletionRequest
 import dev.chungjungsoo.gptmobile.data.dto.openai.common.Role as OpenAIRole
 import dev.chungjungsoo.gptmobile.data.dto.openai.common.TextContent as OpenAITextContent
